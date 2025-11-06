@@ -1,0 +1,104 @@
+[gd_resource type="AudioBusLayout" load_steps=16 format=3 uid="uid://c8x6b0c585r3y"]
+
+[sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_j3pel"]
+resource_name = "SpectrumAnalyzer"
+
+[sub_resource type="AudioEffectPitchShift" id="AudioEffectPitchShift_j3pel"]
+resource_name = "PitchShift"
+pitch_scale = 2.0
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_g28q7"]
+resource_name = "Reverb"
+room_size = 0.3
+damping = 1.0
+wet = 0.0
+
+[sub_resource type="AudioEffectBandPassFilter" id="AudioEffectBandPassFilter_j3pel"]
+resource_name = "BandPassFilter"
+cutoff_hz = 666.0
+resonance = 0.05
+db = 3
+
+[sub_resource type="AudioEffectAmplify" id="AudioEffectAmplify_j3pel"]
+resource_name = "Amplify"
+volume_db = 10.0
+
+[sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_j3pel"]
+resource_name = "Compressor"
+threshold = -10.7
+gain = 20.0
+
+[sub_resource type="AudioEffectNotchFilter" id="AudioEffectNotchFilter_j3pel"]
+resource_name = "NotchFilter"
+cutoff_hz = 20500.0
+resonance = 0.13
+
+[sub_resource type="AudioEffectPitchShift" id="AudioEffectPitchShift_g28q7"]
+resource_name = "PitchShift"
+pitch_scale = 0.5
+
+[sub_resource type="AudioEffectDelay" id="AudioEffectDelay_j3pel"]
+resource_name = "Delay"
+
+[sub_resource type="AudioEffectFilter" id="AudioEffectFilter_j3pel"]
+resource_name = "Filter"
+cutoff_hz = 8000.0
+
+[sub_resource type="AudioEffectPhaser" id="AudioEffectPhaser_j3pel"]
+resource_name = "Phaser"
+range_min_hz = 1317.171
+range_max_hz = 4913.756
+rate_hz = 20.0
+feedback = 0.6
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_j3pel"]
+resource_name = "Reverb"
+room_size = 0.0
+
+[sub_resource type="AudioEffectPitchShift" id="AudioEffectPitchShift_n8wo2"]
+resource_name = "PitchShift"
+pitch_scale = 1.05
+
+[sub_resource type="AudioEffectDistortion" id="AudioEffectDistortion_g28q7"]
+resource_name = "Distortion"
+pre_gain = 5.0
+post_gain = -1.85
+
+[sub_resource type="AudioEffectChorus" id="AudioEffectChorus_j3pel"]
+resource_name = "Chorus"
+voice_count = 1
+dry = 0.5
+wet = 0.2
+
+[resource]
+bus/0/volume_db = 6.0199986
+bus/0/effect/0/effect = SubResource("AudioEffectSpectrumAnalyzer_j3pel")
+bus/0/effect/0/enabled = true
+bus/0/effect/1/effect = SubResource("AudioEffectPitchShift_j3pel")
+bus/0/effect/1/enabled = false
+bus/0/effect/2/effect = SubResource("AudioEffectPitchShift_g28q7")
+bus/0/effect/2/enabled = false
+bus/0/effect/3/effect = SubResource("AudioEffectDelay_j3pel")
+bus/0/effect/3/enabled = false
+bus/0/effect/4/effect = SubResource("AudioEffectFilter_j3pel")
+bus/0/effect/4/enabled = false
+bus/0/effect/5/effect = SubResource("AudioEffectPhaser_j3pel")
+bus/0/effect/5/enabled = false
+bus/0/effect/6/effect = SubResource("AudioEffectReverb_j3pel")
+bus/0/effect/6/enabled = false
+bus/0/effect/7/effect = SubResource("AudioEffectPitchShift_n8wo2")
+bus/0/effect/7/enabled = false
+bus/0/effect/8/effect = SubResource("AudioEffectDistortion_g28q7")
+bus/0/effect/8/enabled = false
+bus/0/effect/9/effect = SubResource("AudioEffectChorus_j3pel")
+bus/0/effect/9/enabled = false
+bus/0/effect/10/effect = SubResource("AudioEffectReverb_g28q7")
+bus/0/effect/10/enabled = false
+bus/0/effect/11/effect = SubResource("AudioEffectBandPassFilter_j3pel")
+bus/0/effect/11/enabled = false
+bus/0/effect/12/effect = SubResource("AudioEffectAmplify_j3pel")
+bus/0/effect/12/enabled = false
+bus/0/effect/13/effect = SubResource("AudioEffectCompressor_j3pel")
+bus/0/effect/13/enabled = false
+bus/0/effect/14/effect = SubResource("AudioEffectNotchFilter_j3pel")
+bus/0/effect/14/enabled = false

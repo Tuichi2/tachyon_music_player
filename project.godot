@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Tachyon Music Player"
+config/description="Queria probar usar un arduino y salio esto XD"
+run/main_scene="uid://dvaj7qqqdd48h"
+config/features=PackedStringArray("4.5", "C#", "Forward Plus")
+config/icon="res://icon.svg"
+
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+
+[dotnet]
+
+project/assembly_name="Trivial-Arduino"
+
+[file_customization]
+
+folder_colors={
+"res://animations/": "orange",
+"res://musica/": "green"
+}

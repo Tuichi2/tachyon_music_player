@@ -1,0 +1,365 @@
+using Godot;
+using System;
+using System.IO;
+//Este funciona para depuracion local
+public partial class Arduino1 : Control
+{
+	[Export] private string musicFolder = "res://musica/";
+	[Export] private float tiempoParaDesactivarFoco = 5.0f;
+	private Timer timerInactividad;
+	private Control ultimoElementoConFoco = null;
+	
+	private AudioStreamPlayer reproductor;
+	private OptionButton listaCanciones;
+	private ProgressBar barraProgreso;
+	private HSlider sliderPosicion;
+	private HSlider sliderVolumen;
+	private Label labelTiempo;
+	private Label labelMusic; 
+	
+	private Button btnPlay, btnPause, btnStop, btnNext, btnPrev, btnLoop;
+	private AnimatedSprite2D animsprite;
+	
+	private string[] canciones;
+	private int indiceActual = 0;
+	private bool arrastrandoSlider = false;
+	private bool loopActivo = false;
+	private bool primeraCarga = true; 
+
+	private string animActual = "idle";
+	private string animDanceActual = "";
+	private float volumenActual => (float)sliderVolumen.Value;
+
+
+	public override void _Ready()
+	{	
+		reproductor = GetNode<AudioStreamPlayer>("../Reproductor");
+		listaCanciones = GetNode<OptionButton>("ListaCanciones/HBoxContainer2/ListaCancionesOpcion");
+		barraProgreso = GetNode<ProgressBar>("ListaCanciones/BarraProgreso");
+		sliderPosicion = GetNode<HSlider>("ListaCanciones/SliderPosicion");
+		sliderVolumen = GetNode<HSlider>("ListaCanciones/HBoxContainer2/SliderVolumen");
+		labelTiempo = GetNode<Label>("ListaCanciones/LabelTiempo");
+		labelMusic = GetNode<Label>("../SubViewport/LabelMusic"); 
+
+		btnPlay = GetNode<Button>("ListaCanciones/HBoxContainer/ButtonPlay");
+		btnPause = GetNode<Button>("ListaCanciones/HBoxContainer/ButtonPause");
+		btnStop = GetNode<Button>("ListaCanciones/HBoxContainer/ButtonStop");
+		btnNext = GetNode<Button>("ListaCanciones/HBoxContainer/ButtonNext");
+		btnPrev = GetNode<Button>("ListaCanciones/HBoxContainer/ButtonPrev");
+		btnLoop = GetNode<Button>("ListaCanciones/HBoxContainer/ButtonLoop");
+		
+		animsprite = GetNode<AnimatedSprite2D>("../AnimatedSprite2D");
+		animsprite.Play("idle");
+
+		btnPlay.Pressed += OnPlayPressed;
+		btnPause.Pressed += OnPausePressed;
+		btnStop.Pressed += OnStopPressed;
+		btnNext.Pressed += OnNextPressed;
+		btnPrev.Pressed += OnPrevPressed;
+		btnLoop.Pressed += OnLoopPressed;
+		
+		timerInactividad = new Timer();
+		AddChild(timerInactividad);
+		timerInactividad.WaitTime = tiempoParaDesactivarFoco;
+		timerInactividad.Timeout += OnTiempoInactividad;
+		timerInactividad.OneShot = true;
+		
+		this.GuiInput += OnGuiInput;
+		ConectarSeñalesFoco();
+		
+		listaCanciones.ItemSelected += OnSongSelected;
+		sliderPosicion.DragStarted += () => arrastrandoSlider = true;
+		sliderPosicion.DragEnded += (bool changed) =>
+		{
+			arrastrandoSlider = false;
+			if (changed)
+				reproductor.Seek((float)sliderPosicion.Value);
+		};
+		
+		sliderVolumen.ValueChanged += (double value) =>
+		{
+			AudioServer.SetBusVolumeDb(AudioServer.GetBusIndex("Master"), (float)Mathf.LinearToDb((float)value));
+		};
+		listaCanciones.CustomMinimumSize = new Vector2(450, 1);
+		listaCanciones.SetAnchorsPreset(Control.LayoutPreset.CenterLeft);
+		
+		//Cargar canciones
+		CargarCanciones();
+		sliderVolumen.Value = 1.5f;
+		
+		ActualizarBotonLoop();
+	}
+	
+	private void CargarCanciones()
+	{
+		var dir = DirAccess.Open(musicFolder);
+		if (dir == null)
+		{
+			GD.PrintErr("No se pudo acceder a la carpeta: " + musicFolder);
+			return;
+		}
+		
+		var archivos = dir.GetFiles();
+		canciones = Array.FindAll(archivos, f => f.EndsWith(".ogg") || f.EndsWith(".mp3") || f.EndsWith(".wav"));
+		listaCanciones.Clear();
+		
+		for (int i = 0; i < canciones.Length; i++)
+		{
+			//mostrar el nombre sin extensiones
+			string nombreSinExtension = canciones[i].GetBaseName();
+			listaCanciones.AddItem(nombreSinExtension);
+		}
+		
+		if (canciones.Length > 0)
+			CargarCancion(0, autoReproducir: false);
+	}
+	
+	private void CargarCancion(int indice, bool autoReproducir = true)
+	{
+		indiceActual = indice;
+		var path = musicFolder + canciones[indice];
+		var stream = ResourceLoader.Load<AudioStream>(path);
+		if (stream != null)
+		{
+			reproductor.Stream = stream;
+			if (loopActivo)
+			{
+				if (reproductor.Stream is AudioStreamOggVorbis oggStream)
+				{
+					oggStream.Loop = true;
+				}
+				else if (reproductor.Stream is AudioStreamMP3 mp3Stream)
+				{
+					mp3Stream.Loop = true;
+				}
+				else if (reproductor.Stream is AudioStreamWav wavStream)
+				{
+					GD.Print("Error");
+					//wavStream.Loop = true;
+				}	
+			}
+			listaCanciones.Select(indice);
+			barraProgreso.Value = 0;
+			sliderPosicion.Value = 0;
+			
+			//  Mstrar el nombre de la cancion actual
+			string nombreSinExtension = canciones[indice].GetBaseName();
+			labelMusic.Text = nombreSinExtension;
+			
+			GD.Print("Reproduciendo: " + nombreSinExtension);
+			
+			//elige una animacion
+			string[] dances = {"dance1", "dance2", "dance3"};
+			animDanceActual = dances[GD.Randi() % dances.Length];
+			
+			if (autoReproducir)
+			OnPlayPressed();
+		}
+	}
+	
+	private void OnPlayPressed()
+	{
+		reproductor.Play();
+		
+		if (volumenActual > 0.05f)
+		{
+			animsprite.Play(animDanceActual);
+			animActual = animDanceActual;
+		}
+		else
+		{
+			animsprite.Play("idle");
+			animActual = "idle";
+		}
+	}
+	
+	private void OnPausePressed()
+	{
+		reproductor.StreamPaused = !reproductor.StreamPaused;
+		ActualizarAnimacion();
+	}
+	
+	private void OnStopPressed()
+	{
+		reproductor.Stop();
+		animsprite.Play("idle");
+		animActual = "idle";
+	}
+	
+	private void OnNextPressed()
+	{
+		if (canciones.Length == 0) return;
+		indiceActual = (indiceActual + 1) % canciones.Length;
+		CargarCancion(indiceActual);
+	}
+	
+	private void OnPrevPressed()
+	{
+		if (canciones.Length == 0) return;
+		indiceActual = (indiceActual - 1 + canciones.Length) % canciones.Length;
+		CargarCancion(indiceActual);
+	}
+	private void OnLoopPressed()
+	{
+		loopActivo = !loopActivo;
+		if (reproductor.Stream != null){
+			if (reproductor.Stream is AudioStreamOggVorbis oggStream)
+			{
+				oggStream.Loop = loopActivo;
+			}
+			else if (reproductor.Stream is AudioStreamMP3 mp3Stream)
+			{
+				mp3Stream.Loop = loopActivo;
+			}
+			else if (reproductor.Stream is AudioStreamWav wavStream)
+			{
+				GD.Print("Error");
+				//wavStream.Loop = loopActivo;
+			}	
+		}
+		ActualizarBotonLoop();
+		GD.Print("Loop " + (loopActivo ? "activado" : "desactivado"));
+	}
+	
+	private void OnSongSelected(long index)
+	{
+		CargarCancion((int)index);
+	}
+	
+	public override void _Process(double delta)
+	{
+		if (reproductor.Stream == null)
+			return;
+			
+		float pos = reproductor.GetPlaybackPosition();
+		float duracion = (float)reproductor.Stream.GetLength();
+		
+		if (!arrastrandoSlider)
+		{
+			barraProgreso.MaxValue = duracion;
+			barraProgreso.Value = pos;
+			sliderPosicion.MaxValue = duracion;
+			sliderPosicion.Value = pos;
+		}
+		
+		labelTiempo.Text = $"{FormatoTiempo(pos)} / {FormatoTiempo(duracion)}";
+		
+		if (!loopActivo && !reproductor.Playing && pos >= duracion - 0.1f)
+		{
+				OnNextPressed();
+		}	
+		ActualizarAnimacion();
+	}
+	
+	private void ActualizarAnimacion()
+	{
+		if (reproductor.Playing && !reproductor.StreamPaused && volumenActual > 0.05f)
+		{
+			if (animActual != animDanceActual)
+			{
+				animsprite.Play(animDanceActual);
+				animActual = animDanceActual;
+			}
+		}
+		else
+		{
+			if (animActual != "idle")
+			{
+				animsprite.Play("idle");
+				animActual = "idle";
+			}
+		}
+	}
+	
+	private void ActualizarBotonLoop()
+	{
+		if (btnLoop != null)
+		{
+			btnLoop.Text = loopActivo ? "        Loop        " : "        Loop        ";
+			btnLoop.Modulate = loopActivo ? new Color("c58281ff") : new Color(1, 1, 1);
+		}
+	}
+	
+	private string FormatoTiempo(float segundos)
+	{
+		int min = (int)(segundos / 60);
+		int seg = (int)(segundos % 60);
+		return $"{min:D2}:{seg:D2}";
+	}
+	private void ConectarSeñalesFoco()
+	{
+		// conectar a todos los controles que pueden recibir focus
+		var controles = new Control[] 
+		{
+			listaCanciones, sliderPosicion, sliderVolumen,
+			btnPlay, btnPause, btnStop, btnNext, btnPrev, btnLoop
+		};
+		
+		foreach (var control in controles)
+		{
+			if (control != null)
+			{
+				control.FocusEntered += () => OnControlConFoco(control);
+			}
+		}
+	}
+	
+	private void OnControlConFoco(Control control)
+	{
+		ultimoElementoConFoco = control;
+		ReiniciarTimerInactividad();
+	}
+
+	private void OnGuiInput(InputEvent @event)
+	{
+		//reinicia ui
+		if (@event is InputEventKey || @event is InputEventMouseButton)
+		{
+			ReiniciarTimerInactividad();
+		}
+	}
+	
+	private void ReiniciarTimerInactividad()
+	{
+		timerInactividad.Stop();
+		timerInactividad.Start();
+	}
+	
+	private void OnTiempoInactividad()
+	{
+		// Quitar el foco del elemento actual
+		if (GetViewport().GuiGetFocusOwner() != null)
+		{
+			GetViewport().GuiReleaseFocus();
+			ultimoElementoConFoco = null;
+		}
+	}
+	
+	// Método adicional para restaurar foco manualmente si lo necesitas
+	public void RestaurarFoco()
+	{
+		if (ultimoElementoConFoco != null && ultimoElementoConFoco.Visible)
+		{
+			ultimoElementoConFoco.GrabFocus();
+		}
+		ReiniciarTimerInactividad();
+	}
+	
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (@event is not InputEventKey keyEvent || !keyEvent.Pressed)
+			return;
+		if (GetViewport().GuiGetFocusOwner() == null)
+		{
+			if (ultimoElementoConFoco != null && ultimoElementoConFoco.Visible)
+			{
+				ultimoElementoConFoco.GrabFocus();
+			}
+			else
+			{
+				btnPlay.GrabFocus();
+			}
+		}
+	}
+}
+//hola chamo :v

@@ -1,0 +1,99 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\USUARIO\\Documents\\music player\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|c:\\users\\usuario\\documents\\music player\\.editorconfig||{68B46364-D378-42F2-9E72-37D86C5F4468}",
+      "RelativeMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|solutionrelative:.editorconfig||{68B46364-D378-42F2-9E72-37D86C5F4468}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|c:\\users\\usuario\\documents\\music player\\arduinovisualizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|solutionrelative:arduinovisualizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|c:\\users\\usuario\\documents\\music player\\arduino1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|solutionrelative:arduino1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|c:\\users\\usuario\\documents\\music player\\trivial-arduino.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{58F6A871-6599-435B-A7C3-E61ABADBBD2E}|Trivial-Arduino.csproj|solutionrelative:trivial-arduino.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": ".editorconfig",
+              "DocumentMoniker": "C:\\Users\\USUARIO\\Documents\\music player\\.editorconfig",
+              "RelativeDocumentMoniker": ".editorconfig",
+              "ToolTip": "C:\\Users\\USUARIO\\Documents\\music player\\.editorconfig*",
+              "RelativeToolTip": ".editorconfig*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-06T20:10:50.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ArduinoVisualizer.cs",
+              "DocumentMoniker": "C:\\Users\\USUARIO\\Documents\\music player\\ArduinoVisualizer.cs",
+              "RelativeDocumentMoniker": "ArduinoVisualizer.cs",
+              "ToolTip": "C:\\Users\\USUARIO\\Documents\\music player\\ArduinoVisualizer.cs",
+              "RelativeToolTip": "ArduinoVisualizer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T20:10:43.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Arduino1.cs",
+              "DocumentMoniker": "C:\\Users\\USUARIO\\Documents\\music player\\Arduino1.cs",
+              "RelativeDocumentMoniker": "Arduino1.cs",
+              "ToolTip": "C:\\Users\\USUARIO\\Documents\\music player\\Arduino1.cs",
+              "RelativeToolTip": "Arduino1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T20:10:35.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Trivial-Arduino",
+              "DocumentMoniker": "C:\\Users\\USUARIO\\Documents\\music player\\Trivial-Arduino.csproj",
+              "RelativeDocumentMoniker": "Trivial-Arduino.csproj",
+              "ToolTip": "C:\\Users\\USUARIO\\Documents\\music player\\Trivial-Arduino.csproj",
+              "RelativeToolTip": "Trivial-Arduino.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-06T20:10:29.393Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
